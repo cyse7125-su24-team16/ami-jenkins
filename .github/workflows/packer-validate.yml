@@ -1,17 +1,41 @@
-name: Hello World Workflow
-
+name: Packer Fmt and Validate Workflow.
+ 
 on:
-  push:
+  pull_request:
     branches:
       - main
-
+ 
 jobs:
-  hello_world:
+  Packer-Fmt-and-Validate:
+    
     runs-on: ubuntu-latest
-
+        
     steps:
-      - name: Checkout repository
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: "1.8.3"
+ 
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Hello World Script
-        run: echo "Hello, World!"
+      - name: Run `packer init`
+        id: init
+        run: packer init packer/jenkins-ami.pkr.hcl
+ 
+      - name: Run packer fmt
+        run: packer fmt --check packer/jenkins-ami.pkr.hcl
+ 
+      - name: Fail if packer fmt fails
+        if: ${{ steps.setup.outputs.exit-code != 0 }}
+        run: exit 1
+ 
+      - name: Run packer validate
+        run: packer validate packer/jenkins-ami.pkr.hcl
+ 
+      - name: Fail if packer validate fails
+        if: ${{ steps.setup.outputs.exit-code != 0 }}
+        run: exit 1
+ 
