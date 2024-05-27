@@ -1,0 +1,39 @@
+name: Packer Build Workflow.
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ami_build:
+    name: Building Image with Jenkins Confirguations.
+    runs-on: ubuntu-latest
+    outputs:
+      AMI_ID: ${{ steps.GET_AMI.outputs.AMI_ID }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
+          aws-region: us-west-2
+
+      - name: Packer Init
+        run: packer init ./packer/jenkins-ami.pkr.hcl
+
+      - name: Packer Build
+        env:
+          aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
+        run: packer build ./packer/jenkins-ami.pkr.hcl
+
+      - name: GET AMI ID
+        id: GET_AMI
+        run: |
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+          echo $AMI_ID
+          echo "AMI_ID=$AMI_ID" >> "$GITHUB_OUTPUT"
