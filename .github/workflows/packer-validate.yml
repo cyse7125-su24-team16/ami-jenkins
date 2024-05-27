@@ -1,3 +1,4 @@
+
 ##Workflow to validate packer..
 name: Build Jenkins AMI
 
@@ -21,6 +22,7 @@ jobs:
           aws-secret-access-key: "vR+lfxepbI84w7rHTy08CM9Guu1JxBqxcMlsMNf9"
           # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
           aws-region: us-east-1  
 
       - name: Setup Packer
