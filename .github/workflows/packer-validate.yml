@@ -1,4 +1,4 @@
-##Workflow to validate packer.
+##Workflow to validate packer
 name: Build Jenkins AMI
 
 on:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: packer-validate
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
