@@ -1,4 +1,4 @@
-##Workflow to validate packer
+##Workflow to validate packer.
 name: Build Jenkins AMI
 
 on:
