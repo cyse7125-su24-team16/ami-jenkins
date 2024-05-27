@@ -3,6 +3,7 @@ name: Build Jenkins AMI
 
 on:
   pull_request:
+    types: [closed]
     branches:
       - main
 
@@ -12,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
