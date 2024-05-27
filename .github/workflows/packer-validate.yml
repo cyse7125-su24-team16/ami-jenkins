@@ -1,12 +1,13 @@
 name: Simple Workflow
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
 jobs:
   build:
+    name: test-build
     runs-on: ubuntu-latest
 
     steps:
