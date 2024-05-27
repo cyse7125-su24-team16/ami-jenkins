@@ -2,14 +2,14 @@
 name: Build Jenkins AMI
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
   build:
-
-    if: github.event.pull_request.merged == true
+    name: packer-validate
+    #if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
