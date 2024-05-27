@@ -1,8 +1,13 @@
 packer {
   required_plugins {
+    git = {
+      version = ">= v0.4.3"
+      source  = "github.com/ethanmdavidson/git"
+    }
+
     amazon = {
-      version = ">= 1.3.2"
       source  = "github.com/hashicorp/amazon"
+      version = "~> 1"
     }
   }
 }
@@ -17,6 +22,38 @@ variable "source_ami" {
   default     = "ami-04b70fa74e45c3917"
 }
 
+variable "ami-prefix" {
+  type    = string
+  default = "Csye-7125-Packer-Image"
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "Subnet of the default VPC"
+  default     = "subnet-0ab3f6d871ff677bb"
+}
+
+variable "OS" {
+  type        = string
+  description = "Base operating system version"
+  default     = "Ubuntu"
+}
+
+variable "ami_users" {
+  type    = list(string)
+  default = [992382384015]
+}
+
+variable "aws-access-key-id" {
+  type    = string
+  default = env("aws-access-key-id")
+}
+
+variable "aws-secret-access-key" {
+  type    = string
+  default = env("aws-secret-access-key")
+}
+
 variable "instance_type" {
   description = "The instance type to use for the build."
   default     = "t2.micro"
@@ -29,7 +66,7 @@ variable "ssh_username" {
 
 variable "ami_name" {
   description = "The name of the created AMI."
-  default     = "jenkins-ami"
+  default     = "Jenkins-AMI"
 }
 
 locals {
@@ -37,20 +74,40 @@ locals {
 }
 
 source "amazon-ebs" "ubuntu" {
-  region          = var.aws_region
-  source_ami      = var.source_ami
-  instance_type   = var.instance_type
-  ssh_username    = var.ssh_username
+  region          = "${var.aws_region}"
   ami_name        = "${var.ami_name}--${local.timestamp}"
-  ami_description = "Jenkins AMI built with Packer"
+  ami_description = "Building Jenkins AMI built with Packer"
+  ami_users       = "${var.ami_users}"
+  instance_type   = "${var.instance_type}"
+  source_ami      = "${var.source_ami}"
+  ssh_username    = "${var.ssh_username}"
+  subnet_id       = "${var.subnet_id}"
+  ami_regions     = ["${var.aws_region}", ]
+  access_key      = "${var.aws-access-key-id}"
+  secret_key      = "${var.aws-secret-access-key}"
 
+  tags = {
+    Name = "csye7125Jenkins_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
+  }
 
-  access_key = "AKIA3FLD4S4RQROHAOFE"
-  secret_key = "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"
+  aws_polling {
+    delay_seconds = 120
+    max_attempts  = 50
+  }
+
+  launch_block_device_mappings {
+    delete_on_termination = true
+    device_name           = "/dev/sda1"
+  }
 }
 
 build {
   sources = ["source.amazon-ebs.ubuntu"]
+
+  provisioner "file" {
+    source      = "./packer"
+    destination = "/home/ubuntu/packer"
+  }
 
   provisioner "shell" {
     inline = [
@@ -62,5 +119,8 @@ build {
       "sudo apt-get install -y jenkins",
       "sudo systemctl enable jenkins",
     ]
+  }
+  post-processor "manifest" {
+    output = "manifest.json"
   }
 }
