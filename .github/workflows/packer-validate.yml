@@ -1,45 +1,17 @@
-##Workflow to validate packer
-name: Build Jenkins AMI
+name: Hello World Workflow
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  build:
-    name: packer-validate
-    if: github.event.pull_request.merged == true
+  hello_world:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: "AKIA3FLD4S4RQROHAOFE"
-          aws-secret-access-key: "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"
-          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-          aws-region: us-east-1  
-
-      - name: Setup Packer
-        uses: hashicorp/setup-packer@main
-        id: setup
-        with:
-          version: "1.8.3"
-
-      - name: Initialize Packer
-        run: packer init packer/jenkins-ami.pkr.hcl
-
-      - name: Format Packer template
-        run: packer fmt -check packer/jenkins-ami.pkr.hcl
- 
-      - name: Validate Packer template
-        run: packer validate packer/jenkins-ami.pkr.hcl  
-
-     
-
+      - name: Run Hello World Script
+        run: echo "Hello, World!"
