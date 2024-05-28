@@ -1,7 +1,7 @@
 name: Packer Fmt and Validate Workflow.
  
 on:
-  pull_request:
+  push:
     branches:
       - main
  
