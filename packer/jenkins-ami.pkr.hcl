@@ -14,34 +14,34 @@ packer {
 
 variable "aws_region" {
   description = "The AWS region to deploy to."
-  // default     = "us-east-1"
+  default     = "us-east-1"
 }
 
 variable "source_ami" {
   description = "The source Ubuntu 24.04 LTS AMI."
-  // default     = "ami-04b70fa74e45c3917"
+  default     = "ami-04b70fa74e45c3917"
 }
 
 variable "ami-prefix" {
-  type = string
-  // default = "Csye-7125-Packer-Image"
+  type    = string
+  default = "Csye-7125-Packer-Image"
 }
 
 variable "subnet_id" {
   type        = string
   description = "Subnet of the default VPC"
-  // default     = "subnet-0ab3f6d871ff677bb"
+  default     = "subnet-0ab3f6d871ff677bb"
 }
 
 variable "OS" {
   type        = string
   description = "Base operating system version"
-  //default     = "Ubuntu"
+  default     = "Ubuntu"
 }
 
 variable "ami_users" {
-  type = list(string)
-  //default = [992382384015]
+  type    = list(string)
+  default = [992382384015, 767398141113]
 }
 
 variable "aws-access-key-id" {
@@ -56,17 +56,17 @@ variable "aws-secret-access-key" {
 
 variable "instance_type" {
   description = "The instance type to use for the build."
-  // default     = "t2.micro"
+  default     = "t2.micro"
 }
 
 variable "ssh_username" {
   description = "The SSH username to use."
-  // default     = "ubuntu"
+  default     = "ubuntu"
 }
 
 variable "ami_name" {
   description = "The name of the created AMI."
-  // default     = "Jenkins-AMI"
+  default     = "Jenkins-AMI"
 }
 
 locals {
