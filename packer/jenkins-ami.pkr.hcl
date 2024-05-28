@@ -41,7 +41,7 @@ variable "OS" {
 
 variable "ami_users" {
   type    = list(string)
-  default = [992382384015, 767398141113]
+  default = ["992382384015", "767398141113"]
 }
 
 variable "aws-access-key-id" {
