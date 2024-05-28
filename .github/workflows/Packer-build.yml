@@ -33,7 +33,7 @@ jobs:
           echo aws_region=\"us-east-1\" >> jenkinsami.pkrvars.hcl
           echo instance_type=\"t2.micro\" >> jenkinsami.pkrvars.hcl
           echo device_name=\"/dev/sda1\" >> jenkinsami.pkrvars.hcl
-          echo ami_users=\"[992382384015, 767398141113]\" >> jenkinsami.pkrvars.hcl
+          echo ami_users=\"["992382384015", "767398141113"]\" >> jenkinsami.pkrvars.hcl
           echo ami_name=\"Jenkins-AMI\" >> jenkinsami.pkrvars.hcl
 
       - name: Packer Init
