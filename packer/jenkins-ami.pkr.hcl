@@ -120,6 +120,18 @@ build {
       "sudo systemctl enable jenkins",
     ]
   }
+  provisioner "shell" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install caddy -y",
+      "sudo systemctl enable caddy",
+      "sudo systemctl status caddy",
+      "sudo mkdir -p /etc/caddy",
+      "sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\njenkins.vaishnavimantri.me {\n\treverse_proxy localhost:8080\n}\nEOF'",
+      "sudo systemctl restart caddy"
+    ]
+  }
+  
   post-processor "manifest" {
     output = "manifest.json"
   }
