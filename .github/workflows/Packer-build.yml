@@ -33,7 +33,6 @@ jobs:
           echo aws_region=\"${{ secrets.AWS_REGION }}\" >> jenkinsami.pkrvars.hcl
           echo instance_type=\"${{ secrets.INSTANCE_TYPE }}\" >> jenkinsami.pkrvars.hcl
           echo device_name=\"${{ secrets.DEVICE_NAME }}\" >> jenkinsami.pkrvars.hcl
-          echo ami_users=[\"${{ secrets.AMI_USER_1 }}\", \"${{ secrets.AMI_USER_2 }}\"] >> jenkinsami.pkrvars.hcl
           echo ami_name=\"${{ secrets.AMI_NAME }}\" >> jenkinsami.pkrvars.hcl
 
       - name: Packer Init
