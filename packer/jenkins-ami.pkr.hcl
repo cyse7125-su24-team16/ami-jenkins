@@ -30,7 +30,7 @@ variable "ami-prefix" {
 variable "subnet_id" {
   type        = string
   description = "Subnet of the default VPC"
-  default     = "subnet-0ab3f6d871ff677bb"
+  default     = "subnet-06bea9945ba667934"
 }
 
 variable "OS" {

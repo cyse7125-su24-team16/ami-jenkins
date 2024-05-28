@@ -1,4 +1,4 @@
-name: Packer Build Workflo
+name: Packer Build Workflow
 
 on:
   pull_request:
