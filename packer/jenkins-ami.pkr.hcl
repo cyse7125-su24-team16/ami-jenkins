@@ -131,7 +131,7 @@ build {
       "sudo systemctl restart caddy"
     ]
   }
-  
+
   post-processor "manifest" {
     output = "manifest.json"
   }
