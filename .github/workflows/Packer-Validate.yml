@@ -1,7 +1,7 @@
 name: Packer Fmt and Validate Workflow.
  
 on:
-  push:
+  pull_request:
     branches:
       - main
  
@@ -19,7 +19,8 @@ jobs:
           version: "1.8.3"
  
       - name: Checkout code
-        uses: actions/checkout@v2          
+        uses: actions/checkout@v2
+          
  
       - name: Run `packer init`
         id: init
