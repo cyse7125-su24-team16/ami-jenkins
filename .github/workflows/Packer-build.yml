@@ -1,4 +1,4 @@
-name: Packer Build Workflow
+name: Packer Build Workflow.
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   ami_build:
-    name: Building Image with Jenkins Configurations
+    name: Building Image with Jenkins Confirguations.
     runs-on: ubuntu-latest
     outputs:
       AMI_ID: ${{ steps.GET_AMI.outputs.AMI_ID }}
@@ -22,7 +22,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
           aws-region: us-east-1
 
-      # - name: Create & configure Packer variables
+       # - name: Create & configure Packer variables
       #   run: |
       #     touch jenkinsami.pkrvars.hcl
       #     echo ami_prefix=\"${{ secrets.AMI_PREFIX }}\" >> jenkinsami.pkrvars.hcl
