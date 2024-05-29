@@ -1,4 +1,4 @@
-name: Packer Build Workflow
+name: Packer Build Workflow.
 
 on:
   push:
