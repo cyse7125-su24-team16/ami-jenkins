@@ -86,17 +86,17 @@ locals {
 }
 
 source "amazon-ebs" "ubuntu" {
-  region          = "${secrets.aws_region}"
-  ami_name        = "${secrets.ami_name}--${local.timestamp}"
+  region          = "${var.aws_region}"
+  ami_name        = "${var.ami_name}--${local.timestamp}"
   ami_description = "Building Jenkins AMI built with Packer"
-  ami_users       = "${secrets.ami_users}"
-  instance_type   = "${secrets.instance_type}"
-  source_ami      = "${secrets.source_ami}"
-  ssh_username    = "${secrets.ssh_username}"
-  subnet_id       = "${secrets.subnet_id}"
-  ami_regions     = ["${secrets.aws_region}", ]
-  access_key      = "${secrets.aws-access-key-id}"
-  secret_key      = "${secrets.aws-secret-access-key}"
+  ami_users       = "${var.ami_users}"
+  instance_type   = "${var.instance_type}"
+  source_ami      = "${var.source_ami}"
+  ssh_username    = "${var.ssh_username}"
+  subnet_id       = "${var.subnet_id}"
+  ami_regions     = ["${var.aws_region}", ]
+  access_key      = "${var.aws-access-key-id}"
+  secret_key      = "${var.aws-secret-access-key}"
 
   tags = {
     Name = "csye7125Jenkins_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
