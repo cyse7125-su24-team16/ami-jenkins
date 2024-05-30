@@ -23,7 +23,7 @@ jobs:
 
       - name: Create & configure Packer variables
         run: |
-          touch jenkins-ami.pkrvars.hcl
+          touch ./packer/jenkins-ami.pkrvars.hcl
           echo ami_prefix=\"${{ vars.AMI_PREFIX }}\" >> jenkins-ami.pkrvars.hcl
           echo OS=\"${{ vars.OS }}\" >> ami.pkrvars.hcl
           echo ubuntu_version=\"${{ vars.UBUNTU_VERSION }}\" >> jenkins-ami.pkrvars.hcl
