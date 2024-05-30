@@ -28,7 +28,8 @@ variable "source_ami" {
 
 variable "ami-prefix" {
   type    = string
-  default = "Csye-7125-Packer-Image"
+  default = ""
+  //default = "Csye-7125-Packer-Image"
 }
 
 variable "subnet_id" {
