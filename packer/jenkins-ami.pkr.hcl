@@ -48,7 +48,7 @@ variable "OS" {
 
 variable "ami_users" {
   type    = list(string)
-  default = ""
+  default = []
   // default = ["992382384015", "767398141113"]
 }
 
