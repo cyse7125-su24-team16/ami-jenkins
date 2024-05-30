@@ -1,4 +1,4 @@
-name: Packer Fmt and Validate Workflow.
+name: Packer Fmt and Validate Workflow
  
 on:
   pull_request:
