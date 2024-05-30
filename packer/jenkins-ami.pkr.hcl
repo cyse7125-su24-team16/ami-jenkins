@@ -16,52 +16,44 @@ variable "aws_region" {
   description = "The AWS region to deploy to."
   type        = string
   default     = ""
-  //default     = "us-east-1"
 }
 
 variable "source_ami" {
   description = "The source Ubuntu 24.04 LTS AMI."
   type        = string
   default     = ""
-  //default = "ami-04b70fa74e45c3917"
 }
 
 variable "ami-prefix" {
   type    = string
   default = ""
-  //default = "Csye-7125-Packer-Image"
 }
 
 variable "subnet_id" {
   type        = string
   description = "Subnet of the default VPC"
   default     = ""
-  // default     = "subnet-06bea9945ba667934"
 }
 
 variable "OS" {
   type        = string
   description = "Base operating system version"
   default     = ""
-  //default     = "Ubuntu"
 }
 
 variable "ami_users" {
   type    = list(string)
   default = []
-  // default = ["992382384015", "767398141113"]
 }
 
 variable "aws-access-key-id" {
-  type = string
-  //default = env("aws-access-key-id")
-  default = "AKIA3FLD6LS4ZTECNNN5"
+  type    = string
+  default = env("aws-access-key-id")
 }
 
 variable "aws-secret-access-key" {
-  type = string
-  //default = env("aws-secret-access-key")
-  default = "Co1BFZXO4/33oJ7Ar+jAr5FF0ocpqsv8LOhh6Eul"
+  type    = string
+  default = env("aws-secret-access-key")
 
 }
 
@@ -69,14 +61,12 @@ variable "instance_type" {
   description = "The instance type to use for the build."
   type        = string
   default     = ""
-  // default     = "t2.micro"
 }
 
 variable "ssh_username" {
   description = "The SSH username to use."
   type        = string
   default     = ""
-  // default     = "ubuntu"
 }
 
 variable "ami_name" {
