@@ -27,7 +27,6 @@ jobs:
           touch ./packer/jenkins-ami.pkrvars.hcl
           echo ami_prefix=\"${{ vars.AMI_PREFIX }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo OS=\"${{ vars.OS }}\" >> ./packer/jenkins-ami.pkrvars.hcl
-          echo ubuntu_version=\"${{ vars.UBUNTU_VERSION }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo ssh_username=\"${{ vars.SSH_USERNAME }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo subnet_id=\"${{ secrets.SUBNET_ID }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo source_ami=\"${{ vars.SOURCE_AMI }}\" >> ./packer/jenkins-ami.pkrvars.hcl
