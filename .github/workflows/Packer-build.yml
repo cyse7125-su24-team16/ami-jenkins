@@ -42,7 +42,7 @@ jobs:
         env:
           aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
-        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}' ./packer/jenkins-ami.pkr.hcl
+        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}' --var-file=jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
 
       - name: GET AMI ID
         id: GET_AMI
