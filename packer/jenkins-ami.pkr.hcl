@@ -19,7 +19,7 @@ variable "aws_region" {
 
 variable "source_ami" {
   description = "The source Ubuntu 24.04 LTS AMI."
-  default     = "ami-04b70fa74e45c3917"
+  // default     = "ami-04b70fa74e45c3917"
 }
 
 variable "ami-prefix" {
@@ -30,7 +30,7 @@ variable "ami-prefix" {
 variable "subnet_id" {
   type        = string
   description = "Subnet of the default VPC"
-  default     = "subnet-06bea9945ba667934"
+  // default     = "subnet-06bea9945ba667934"
 }
 
 variable "OS" {
@@ -40,8 +40,8 @@ variable "OS" {
 }
 
 variable "ami_users" {
-  type    = list(string)
-  default = ["992382384015", "767398141113"]
+  type = list(string)
+  // default = ["992382384015", "767398141113"]
 }
 
 variable "aws-access-key-id" {
@@ -56,12 +56,12 @@ variable "aws-secret-access-key" {
 
 variable "instance_type" {
   description = "The instance type to use for the build."
-  default     = "t2.micro"
+  // default     = "t2.micro"
 }
 
 variable "ssh_username" {
   description = "The SSH username to use."
-  default     = "ubuntu"
+  // default     = "ubuntu"
 }
 
 variable "ami_name" {
