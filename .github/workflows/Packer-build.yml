@@ -26,7 +26,7 @@ jobs:
         run: |
           touch ./packer/jenkins-ami.pkrvars.hcl
           echo ami_prefix=\"${{ vars.AMI_PREFIX }}\" >> ./packer/jenkins-ami.pkrvars.hcl
-          echo OS=\"${{ vars.OS }}\" >> j./packer/jenkins-ami.pkrvars.hcl
+          echo OS=\"${{ vars.OS }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo ubuntu_version=\"${{ vars.UBUNTU_VERSION }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo ssh_username=\"${{ vars.SSH_USERNAME }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo subnet_id=\"${{ secrets.SUBNET_ID }}\" >> ./packer/jenkins-ami.pkrvars.hcl
@@ -41,7 +41,7 @@ jobs:
         env:
           aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
-        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}' --var-file=./packer/jenkins-ami.pkrvars.hcljenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
+        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}' --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
 
       - name: GET AMI ID
         id: GET_AMI
