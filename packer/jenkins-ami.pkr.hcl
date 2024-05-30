@@ -22,8 +22,8 @@ variable "aws_region" {
 variable "source_ami" {
   description = "The source Ubuntu 24.04 LTS AMI."
   type        = string
-  default     = ""
-  // default     = "ami-04b70fa74e45c3917"
+  //default     = ""
+  default = "ami-04b70fa74e45c3917"
 }
 
 variable "ami-prefix" {
