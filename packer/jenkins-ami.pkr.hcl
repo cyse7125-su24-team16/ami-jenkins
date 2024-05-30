@@ -22,8 +22,8 @@ variable "aws_region" {
 variable "source_ami" {
   description = "The source Ubuntu 24.04 LTS AMI."
   type        = string
-  //default     = ""
-  default = "ami-04b70fa74e45c3917"
+  default     = ""
+  //default = "ami-04b70fa74e45c3917"
 }
 
 variable "ami-prefix" {
@@ -53,13 +53,16 @@ variable "ami_users" {
 }
 
 variable "aws-access-key-id" {
-  type    = string
-  default = env("aws-access-key-id")
+  type = string
+  //default = env("aws-access-key-id")
+  default = "AKIA3FLD6LS4ZTECNNN5"
 }
 
 variable "aws-secret-access-key" {
-  type    = string
-  default = env("aws-secret-access-key")
+  type = string
+  //default = env("aws-secret-access-key")
+  default = "Co1BFZXO4/33oJ7Ar+jAr5FF0ocpqsv8LOhh6Eul"
+
 }
 
 variable "instance_type" {
