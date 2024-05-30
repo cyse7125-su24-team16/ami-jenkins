@@ -22,6 +22,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
           aws-region: us-east-1
 
+      - name: Create & configure Packer variables
+        run: |
+          touch jenkins-ami.pkrvars.hcl
+          echo ami_prefix=\"${{ vars.AMI_PREFIX }}\" >> jenkins-ami.pkrvars.hcl
+          echo OS=\"${{ vars.OS }}\" >> ami.pkrvars.hcl
+          echo ubuntu_version=\"${{ vars.UBUNTU_VERSION }}\" >> jenkins-ami.pkrvars.hcl
+          echo ssh_username=\"${{ vars.SSH_USERNAME }}\" >> jenkins-ami.pkrvars.hcl
+          echo subnet_id=\"${{ secrets.SUBNET_ID }}\" >> jenkins-ami.pkrvars.hcl
+          echo source_ami=\"${{ vars.SOURCE_AMI }}\" >> jenkins-ami.pkrvars.hcl
+          echo aws_region=\"${{ vars.AWS_REGION }}\" >> jenkins-ami.pkrvars.hcl
+          echo instance_type=\"${{ vars.INSTANCE_TYPE}}\" >> jenkins-ami.pkrvars.hcl
+
+
       - name: Packer Init
         run: packer init ./packer/jenkins-ami.pkr.hcl
 
@@ -29,7 +42,7 @@ jobs:
         env:
           aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
-        run: packer build ./packer/jenkins-ami.pkr.hcl
+        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}' ./packer/jenkins-ami.pkr.hcl
 
       - name: GET AMI ID
         id: GET_AMI
