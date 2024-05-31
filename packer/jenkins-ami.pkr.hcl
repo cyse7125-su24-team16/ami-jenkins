@@ -147,8 +147,8 @@ build {
       "sudo systemctl enable caddy",
       "sudo systemctl status caddy",
       "sudo mkdir -p /etc/caddy",
-      "sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\n{\n    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory\n}\njenkins.centralhub.me {\n    reverse_proxy localhost:8080\n}\nEOF'",
-      //"sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\njenkins.centralhub.me {\n    reverse_proxy 127.0.0.1:8080\n}\nEOF'",
+      // "sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\n{\n    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory\n}\njenkins.centralhub.me {\n    reverse_proxy localhost:8080\n}\nEOF'",
+      "sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\njenkins.centralhub.me {\n    reverse_proxy 127.0.0.1:8080\n}\nEOF'",
       "sudo systemctl restart caddy"
     ]
   }
