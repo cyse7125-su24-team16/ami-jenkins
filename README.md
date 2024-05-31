@@ -146,7 +146,7 @@ sudo apt-get update
 sudo apt install fontconfig openjdk-17-jre -y
 # Validate installation
 java -version
-```
+
 
 # 💁‍♂️ Jenkins Installation
 
@@ -160,13 +160,11 @@ java -version
     - Run the following command to download the Jenkins GPG key:
     ```shell
     sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-    ```
-    
+
     ### Step 2: Add Jenkins repository to package sources
     - Add the Jenkins repository to the package sources by running
     ```shell
         echo 'deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/' | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-    ```
 
     ### Step 3: Update package lists.
     - Run the following command to update the package lists.
@@ -177,14 +175,11 @@ java -version
     - Install Jenkins by running the following command:
     ```shell
         sudo apt-get update
-    ```
 
     ### Step 5: Enable Jenkins Service.
     - Enable the Jenkins service to start automatically on system boot by running:
     ```shell
         sudo systemctl enable jenkins
-
-    ```
 
     ## 🔒 Configure Caddy Service
 
@@ -194,7 +189,6 @@ java -version
     sudo apt-get install caddy -y
     sudo systemctl enable caddy
     sudo systemctl status caddy
-    ```
 
      ## Configuring Caddy for Jenkins Reverse Proxy
 
@@ -204,7 +198,6 @@ java -version
     - Run the following command to create the Caddy configuration directory:
     ```shell
     sudo mkdir -p /etc/caddy
-    ```
 
     This command creates a directory /etc/caddy where Caddy configuration files will be stored.
 
@@ -212,7 +205,6 @@ java -version
     Use the following command to create the Caddy configuration file /etc/caddy/Caddyfile:
     ```shell
         sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\n{\n    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory\n}\njenkins.centralhub.me {\n    reverse_proxy localhost:8080\n}\nEOF'
-     ```
 
     This command creates a Caddyfile with the following configuration:
     Uses the Let's Encrypt staging environment for certificate issuance (acme_ca https://acme-staging-v02.api.letsencrypt.org/directory).
