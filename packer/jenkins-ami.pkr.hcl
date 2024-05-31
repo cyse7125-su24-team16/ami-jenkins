@@ -114,6 +114,21 @@ build {
     destination = "/home/ubuntu/packer"
   }
 
+  provisioner "file" {
+    source      = "./jenkins/plugins.txt"
+    destination = "/home/ubuntu/plugins.txt"
+  }
+
+  provisioner "file" {
+    source      = "jenkins/jcasc.yaml"
+    destination = "/home/ubuntu/jcasc.yaml"
+  }
+
+  provisioner "file" {
+    source      = "./groovy_scripts"
+    destination = "/home/ubuntu/groovy_scripts"
+  }
+
   provisioner "shell" {
     inline = [
       "sudo apt-get update",
