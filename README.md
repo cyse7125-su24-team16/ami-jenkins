@@ -14,10 +14,6 @@
     aws configure --profile dev
     aws configure --profile prod
 
-    - Jenkins Setup:
-    - Built Jenkins AMI with SSL
-    - CI/CD using GitHub Actions
-
     - GitHub Status Checks:
     - Automated PR validation with `packer validate`
     - Branch protection for `main`
