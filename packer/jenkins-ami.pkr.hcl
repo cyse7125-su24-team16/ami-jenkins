@@ -139,53 +139,53 @@ build {
   }
 
   provisioner "shell" {
-  inline = [
-    # Ensure Jenkins user exists
-    "if ! id -u jenkins >/dev/null 2>&1; then sudo useradd -m -d /var/lib/jenkins -s /bin/bash jenkins; fi",
+    inline = [
+      # Ensure Jenkins user exists
+      "if ! id -u jenkins >/dev/null 2>&1; then sudo useradd -m -d /var/lib/jenkins -s /bin/bash jenkins; fi",
 
-    # Install Jenkins plugin manager tool
-    "wget --quiet https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.0/jenkins-plugin-manager-2.13.0.jar",
+      # Install Jenkins plugin manager tool
+      "wget --quiet https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.0/jenkins-plugin-manager-2.13.0.jar",
 
-    # Install plugins with jenkins-plugin-manager tool
-    "sudo java -jar ./jenkins-plugin-manager-2.13.0.jar --war /usr/share/java/jenkins.war --plugin-download-directory /var/lib/jenkins/plugins --plugin-file /home/ubuntu/plugins.txt",
-  
-   "tar -czvf configs.tgz ./jcasc.yaml ./groovy_scripts/helloworld.groovy ./groovy_scripts/wizard.groovy ./groovy_scripts/login.groovy",
-   "sudo chown ubuntu:ubuntu configs.tgz",
-    
-    "cd /var/lib/jenkins/",
-    "sudo mkdir /var/lib/jenkins/init.groovy.d",
-    "sudo cp /home/ubuntu/groovy_scripts/wizard.groovy /var/lib/jenkins/init.groovy.d/",
-    "sudo cp /home/ubuntu/groovy_scripts/login.groovy /var/lib/jenkins/init.groovy.d/",
+      # Install plugins with jenkins-plugin-manager tool
+      "sudo java -jar ./jenkins-plugin-manager-2.13.0.jar --war /usr/share/java/jenkins.war --plugin-download-directory /var/lib/jenkins/plugins --plugin-file /home/ubuntu/plugins.txt",
 
-    # Update users and group permissions to `jenkins` for all installed plugins
-    "cd /var/lib/jenkins/plugins/ || exit",
-    "sudo chown jenkins:jenkins ./*",
+      "tar -czvf configs.tgz ./jcasc.yaml ./groovy_scripts/helloworld.groovy ./groovy_scripts/wizard.groovy ./groovy_scripts/login.groovy",
+      "sudo chown ubuntu:ubuntu configs.tgz",
 
-    # Move and extract Jenkins configuration files
-    "cd /home/ubuntu/ || exit",
-    "sudo mv configs.tgz /var/lib/jenkins/",
-  
-    # Update file ownership
-    "cd /var/lib/jenkins/ || exit",
-    "sudo tar -xzvf configs.tgz",
-    "sudo chown jenkins:jenkins ./jcasc.yaml ./groovy_scripts/*.groovy",
+      "cd /var/lib/jenkins/",
+      "sudo mkdir /var/lib/jenkins/init.groovy.d",
+      "sudo cp /home/ubuntu/groovy_scripts/wizard.groovy /var/lib/jenkins/init.groovy.d/",
+      "sudo cp /home/ubuntu/groovy_scripts/login.groovy /var/lib/jenkins/init.groovy.d/",
 
-    # Configure JAVA_OPTS to disable setup wizard
-    "sudo mkdir -p /etc/systemd/system/jenkins.service.d/",
-    "echo '[Service]' | sudo tee /etc/systemd/system/jenkins.service.d/override.conf",
-    "echo 'Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jcasc.yml\"' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf",
+      # Update users and group permissions to `jenkins` for all installed plugins
+      "cd /var/lib/jenkins/plugins/ || exit",
+      "sudo chown jenkins:jenkins ./*",
 
-     # Increase Jenkins service timeout and check status and logs
-    "echo 'Configuring Jenkins service timeout and checking status...'",
-    "sudo mkdir -p /etc/systemd/system/jenkins.service.d/",
-    "echo '[Service]' | sudo tee /etc/systemd/system/jenkins.service.d/override.conf",
-    "echo 'TimeoutStartSec=600' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf",
-    "sudo systemctl daemon-reload",
-    "sudo systemctl enable jenkins",
-    "sudo systemctl restart jenkins",
-    "sudo systemctl status jenkins"
-  ]
-}
+      # Move and extract Jenkins configuration files
+      "cd /home/ubuntu/ || exit",
+      "sudo mv configs.tgz /var/lib/jenkins/",
+
+      # Update file ownership
+      "cd /var/lib/jenkins/ || exit",
+      "sudo tar -xzvf configs.tgz",
+      "sudo chown jenkins:jenkins ./jcasc.yaml ./groovy_scripts/*.groovy",
+
+      # Configure JAVA_OPTS to disable setup wizard
+      "sudo mkdir -p /etc/systemd/system/jenkins.service.d/",
+      "echo '[Service]' | sudo tee /etc/systemd/system/jenkins.service.d/override.conf",
+      "echo 'Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jcasc.yml\"' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf",
+
+      # Increase Jenkins service timeout and check status and logs
+      "echo 'Configuring Jenkins service timeout and checking status...'",
+      "sudo mkdir -p /etc/systemd/system/jenkins.service.d/",
+      "echo '[Service]' | sudo tee /etc/systemd/system/jenkins.service.d/override.conf",
+      "echo 'TimeoutStartSec=600' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf",
+      "sudo systemctl daemon-reload",
+      "sudo systemctl enable jenkins",
+      "sudo systemctl restart jenkins",
+      "sudo systemctl status jenkins"
+    ]
+  }
 
   post-processor "manifest" {
     output = "manifest.json"
