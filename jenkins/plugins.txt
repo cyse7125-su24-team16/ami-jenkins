@@ -1,0 +1,14 @@
+configuration-as-code:latest
+configuration-as-code-groovy:latest
+credentials:latest
+credentials-binding:latest
+display-url-api:latest
+git:latest
+github:latest
+github-api:latest
+github-branch-source:latest
+gradle:latest
+groovy:latest
+permissive-script-security:latest
+script-security:latest
+
