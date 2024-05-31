@@ -6,11 +6,11 @@ import hudson.security.*
 
 println "--> creating admin user"
 
-def adminUsername = System.getenv("JENKINS_USERNAME")
-def adminPassword = System.getenv("JENKINS_PASSWORD")
+//def adminUsername = System.getenv("ADMIN_USERNAME")
+//def adminPassword = System.getenv("ADMIN_PASSWORD")
 
-//def adminUsername = "admin"
-//def adminPassword = "admin123"
+def adminUsername = "admin"
+def adminPassword = "admin123"
 
 assert adminPassword != null : "No ADMIN_USERNAME env var provided, but required"
 assert adminPassword != null : "No ADMIN_PASSWORD env var provided, but required"
