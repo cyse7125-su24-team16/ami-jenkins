@@ -1,74 +1,223 @@
-## Assignment 1
+## Jenkins AMI with HashiCorp Packer
 
-### AWS Organization Setup:
+### AWS Organization Setup
 
-Support for organizations was enabled in the AWS account.
-A root dev and a prod were created.
-AWS CLI was installed and configured on the development machine.
-Root, D=dev and prod AWS CLI profiles were created, both set to use the us-east-1 region.
+- Create organizations in the AWS account.
+- Create root `dev` and `prod` organizational profiles.
+- Install and configure AWS CLI on the development machine.
+- For configuring the CLI, use the following [link](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
+- Create AWS CLI profiles for `dev` and `prod`, both set to use the `us-east-1` region.
 
-aws configure --profile env
+    ```bash
+    aws configure --profile dev
+    aws configure --profile prod
+    ```
 
-### Jenkins Setup:
+### GitHub Status Checks
 
-An IAM user named ghactions for GitHub Actions was created in the root AWS account.
-A GitHub repository named ami-jenkins for Jenkins AMI was created and set up.
-Jenkins AMI was built using Packer, including SSL configuration with Caddy or Nginx.
-CI/CD for building Jenkins AMI with GitHub Actions was implemented.
+- Automated PR validation with `packer validate`.
+- Branch protection for `main`.
 
-### Domain Name & Route53:
+## :package: [Packer](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli?in=packer/aws-get-started)
 
-Hosted zone was set up in Route53 for the domain name and the nameservers of the domain were registered in namecheap for the domain.
-A subdomain jenkins.centralhub.me with a TTL of 60 seconds was created.
+We will build a custom AMI (Amazon Machine Image) using Packer from HashiCorp.
 
-### GitHub Status Checks for AMIs:
+### :arrow_heading_down: Installing Packer
 
-GitHub status checks were enabled on the GitHub repository.
-packer validate was configured to run on all pull requests.
-A branch protection rule was added for the main branch.
+#### Installing Packer on Windows
 
-### Setup GitHub Repository for Jenkins Infrastructure:
+1. **Install Chocolatey package manager**
+    - Open PowerShell as Administrator.
+    - Run the following command to install Chocolatey:
 
-A GitHub repository named infra-jenkins for Jenkins infrastructure was created.
+    ```shell
+    @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+    ```
 
-#### Enable GitHub Status Checks for Terraform Infrastructure:
+2. **Install Packer**
+    - Once Chocolatey is installed, you can install Packer by running the following command:
 
-A GitHub Actions workflow was created to run pr-check for validating Terraform code.
+    ```shell
+    choco install packer
+    ```
 
-### Assign Elastic IP & DNS Record:
+3. **Update Packer**
+    - Update Packer:
 
-An Elastic IP address was allocated for the Jenkins instance in the ROOT AWS account.
-A DNS A record jenkins.centralhub.me with the value of the allocated Elastic IP was added.
+    ```shell
+    choco upgrade packer
+    ```
 
-### Infrastructure as Code with Terraform:
+4. **Verify Packer installation**
+    - Verify Packer is installed properly:
 
-Networking components such as VPC, subnets, route table, internet gateway, security groups, Network interface, etc., were set up.
-EC2 instance with the Jenkins AMI was launched and terminated.
-The allocated Elastic IP address was attached to the EC2 instance.
-Caddy was configured to handle SSL certificate from Let's Encrypt and reverse proxy for Jenkins.
-Proper logic was implemented to terminate the EC2 instance when tearing down the infrastructure.
+    ```shell
+    packer
+    ```
 
-## Packer Commands
+### :wrench: Building Custom AMI using Packer
 
-### Initialization
-Initialize a new Packer configuration:
+Packer uses HashiCorp Configuration Language (HCL) to create a build template. We'll use the [Packer docs](https://www.packer.io/docs/templates/hcl_templates) to create the build template file.
 
-packer init .
+> **NOTE:** The file should end with the `.pkr.hcl` extension to be parsed using the HCL2 format.
 
-### Formatting
-Format Packer configuration files for consistent style:
+#### Create the `.pkr.hcl` template
 
-packer fmt jenkins-ami.pkr.hcl
+The custom AMI should have the following features:
+
+> **NOTE:** The builder to be used is `amazon-ebs`.
+
+- **OS:** `Ubuntu 24.04 LTS`
+- **Build:** Built on the default VPC
+- **Device Name:** `/dev/sda1/`
+- **Volume Size:** `8GiB`
+- **Volume Type:** `gp2`
+- Have valid `provisioners`.
+- Pre-installed dependencies using a shell script.
+- Jenkins pre-installed on the AMI.
+
+#### Shell Provisioners
+
+This will automate the process of updating the OS packages and installing software on the AMI and will have our application in a running state whenever the custom AMI is used to launch an EC2 instance. It should also copy artifacts to the AMI in order to get the application running. It is important to bootstrap our application here, instead of manually SSH-ing into the AMI instance.
+
+Install application prerequisites, middlewares, and runtime dependencies here. Update the permission and file ownership on the copied application artifacts.
+
+> **NOTE:** The file provisioners must copy the application artifacts and configuration to the right location.
+
+#### Custom AMI creation
+
+To create the custom AMI from the `.pkr.hcl` template created earlier, use the commands given below:
+
+1. **Initialize Packer plugins** (if you're using Packer plugins):
+
+    ```shell
+    # Installs all packer plugins mentioned in the config template
+    packer init .
+    ```
+
+2. **Format the template**:
+
+    ```shell
+    packer fmt .
+    ```
+
+3. **Validate the template**:
+
+    ```shell
+    # To validate syntax only
+    packer validate -syntax-only .
+    # To validate the template as a whole
+    packer validate -evaluate-datasources .
+    ```
+
+4. **Build the custom AMI using Packer**:
+
+    ```shell
+    packer build <filename>.pkr.hcl
+    ```
+
+#### Packer HCL Variables
+
+To prevent pushing sensitive details to your version control, we can have variables in the `<filename>.pkr.hcl` file and then declare the actual values for these variables in another HCL file with the extension `.pkrvars.hcl`.
+
+1. **Validate your build configuration**:
+
+    ```shell
+    packer validate -evaluate-datasources --var-file=<variables-file>.pkrvars.hcl <build-config>.pkr.hcl
+    ```
+
+2. **Build with variables**:
+
+    ```shell
+    packer build --var-file=<variables-file>.pkrvars.hcl <build-config>.pkr.hcl
+    ```
+
+> **NOTE:** It is considered best practice to build a custom AMI with variables using HCP Packer!
+
+## ⤵️ Install Required Software
+
+In order for Jenkins to run, it requires `Java`.
+
+### ☕️ Java Installation
+
+```bash
+# Installing Java
+sudo apt-get update
+sudo apt install fontconfig openjdk-17-jre -y
+# Validate installation
+java -version
+```
+
+# 💁‍♂️ Jenkins Installation
+
+# Installing Jenkins
+
+    ## Installing Jenkins on Debian-based Linux
+
+    To install Jenkins on Debian-based Linux distributions, follow these steps:
+
+    ### Step 1: Download Jenkins GPG key
+    - Run the following command to download the Jenkins GPG key:
+    ```shell
+    sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    ```
+    
+    ### Step 2: Add Jenkins repository to package sources
+    - Add the Jenkins repository to the package sources by running
+    ```shell
+        echo 'deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/' | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+    ```
+
+    ### Step 3: Update package lists.
+    - Run the following command to update the package lists.
+    ```shell
+        sudo apt-get update
+
+    ### Step 4: Install Jenkins.
+    - Install Jenkins by running the following command:
+    ```shell
+        sudo apt-get update
+    ```
+
+    ### Step 5: Enable Jenkins Service.
+    - Enable the Jenkins service to start automatically on system boot by running:
+    ```shell
+        sudo systemctl enable jenkins
+
+    ```
+
+    ## 🔒 Configure Caddy Service
+
+    ```bash
+    # Install and enable caddy:
+    sudo apt update # required to refresh apt with the newly installed keys.
+    sudo apt-get install caddy -y
+    sudo systemctl enable caddy
+    sudo systemctl status caddy
+    ```
+
+     ## Configuring Caddy for Jenkins Reverse Proxy
+
+    To configure Caddy as a reverse proxy for Jenkins on your server, follow these steps:
+
+    ### Step 1: Create Caddy Configuration Directory
+    - Run the following command to create the Caddy configuration directory:
+    ```shell
+    sudo mkdir -p /etc/caddy
+    ```
+
+    This command creates a directory /etc/caddy where Caddy configuration files will be stored.
+
+    ### Step 2: Create Caddy Configuration File
+    Use the following command to create the Caddy configuration file /etc/caddy/Caddyfile:
+    ```shell
+        sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\n{\n    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory\n}\njenkins.centralhub.me {\n    reverse_proxy localhost:8080\n}\nEOF'
+     ```
+
+    This command creates a Caddyfile with the following configuration:
+    Uses the Let's Encrypt staging environment for certificate issuance (acme_ca https://acme-staging-v02.api.letsencrypt.org/directory).
+    Configures a reverse proxy for the domain jenkins.centralhub.me, forwarding requests to Jenkins running on localhost:8080.
 
 
-### Validation
-Validate syntax and configuration of Packer templates:
 
-packer validate jenkins-ami.pkr.hcl
-
-
-### Building
-Build machine images based on Packer templates:
-
-packer build jenkins-ami.pkr.hcl
 
