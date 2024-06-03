@@ -11,4 +11,7 @@ gradle:latest
 groovy:latest
 permissive-script-security:latest
 script-security:latest
+workflow-aggregator:latest
+docker-workflow:latest 
+
 
