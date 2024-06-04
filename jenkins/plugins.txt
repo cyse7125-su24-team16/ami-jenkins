@@ -9,8 +9,3 @@ github-api:latest
 github-branch-source:latest
 gradle:latest
 groovy:latest
-permissive-script-security:latest
-script-security:latest
-workflow-aggregator:latest
-docker-workflow:latest 
-github-pullrequest:latest
