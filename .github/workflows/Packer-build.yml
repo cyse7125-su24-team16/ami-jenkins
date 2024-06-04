@@ -1,10 +1,10 @@
 name: Packer Build Workflow
-
+ 
 on:
   push:
     branches:
       - main
-
+ 
 jobs:
   ami_build:
     name: Building Image with Jenkins Confirguations.
@@ -14,14 +14,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
+ 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
           aws-region: us-east-1
-
+ 
       - name: Create & configure Packer variables
         run: |
           touch ./packer/jenkins-ami.pkrvars.hcl
@@ -32,16 +32,16 @@ jobs:
           echo source_ami=\"${{ secrets.SOURCE_AMI }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo aws_region=\"${{ secrets.AWS_REGION }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo instance_type=\"${{ secrets.INSTANCE_TYPE}}\" >> ./packer/jenkins-ami.pkrvars.hcl
-
+ 
       - name: Packer Init
         run: packer init ./packer/jenkins-ami.pkr.hcl
-
+ 
       - name: Packer Build
         env:
           aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
-        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}' --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
-
+        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}'  -var 'jenkins_admin_user=${{ secrets.JENKINS_ADMIN_USER }}' -var 'jenkins_admin_password=${{ secrets.JENKINS_ADMIN_PASSWORD }}' --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
+ 
       - name: GET AMI ID
         id: GET_AMI
         run: |
