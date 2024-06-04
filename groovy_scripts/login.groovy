@@ -6,14 +6,11 @@ import hudson.security.*
 
 println "--> creating admin user"
 
-//def adminUsername = System.getenv("ADMIN_USERNAME")
-//def adminPassword = System.getenv("ADMIN_PASSWORD")
+def adminUsername = System.getenv("JENKINS_ADMIN_USER")
+def adminPassword = System.getenv("JENKINS_ADMIN_PASSWORD")
 
-def adminUsername = "admin"
-def adminPassword = "admin123"
-
-assert adminPassword != null : "No ADMIN_USERNAME env var provided, but required"
-assert adminPassword != null : "No ADMIN_PASSWORD env var provided, but required"
+assert adminUsername != null : "No JENKINS_ADMIN_USER env var provided, but required"
+assert adminPassword != null : "No JENKINS_ADMIN_PASSWORD env var provided, but required"
 
 def hudsonRealm = new HudsonPrivateSecurityRealm(false)
 hudsonRealm.createAccount(adminUsername, adminPassword)
