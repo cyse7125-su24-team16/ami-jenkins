@@ -13,5 +13,4 @@ permissive-script-security:latest
 script-security:latest
 workflow-aggregator:latest
 docker-workflow:latest 
-
-
+github-pullrequest:latest
