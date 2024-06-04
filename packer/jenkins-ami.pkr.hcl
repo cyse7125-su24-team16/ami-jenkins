@@ -74,9 +74,20 @@ variable "ami_name" {
   default     = "Jenkins-AMI"
 }
 
+variable "jenkins_admin_user" {
+  type        = string
+  description = "The Jenkins admin user"
+}
+
+variable "jenkins_admin_password" {
+  type        = string
+  description = "The Jenkins admin password"
+}
+
 locals {
   timestamp = regex_replace(formatdate("YYYY-MM-DD-hh-mm-ss", timestamp()), "[- TZ:]", "")
 }
+
 
 source "amazon-ebs" "ubuntu" {
   region          = "${var.aws_region}"
@@ -147,7 +158,7 @@ build {
       "sudo systemctl enable caddy",
       "sudo systemctl status caddy",
       "sudo mkdir -p /etc/caddy",
-      // "sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\n{\n    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory\n}\njenkins.centralhub.me {\n    reverse_proxy localhost:8080\n}\nEOF'",
+      //"sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\n{\n    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory\n}\njenkins.centralhub.me {\n    reverse_proxy localhost:8080\n}\nEOF'",
       "sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF\njenkins.centralhub.me {\n    reverse_proxy 127.0.0.1:8080\n}\nEOF'",
       "sudo systemctl restart caddy"
     ]
@@ -155,9 +166,6 @@ build {
 
   provisioner "shell" {
     inline = [
-      # Ensure Jenkins user exists
-      "if ! id -u jenkins >/dev/null 2>&1; then sudo useradd -m -d /var/lib/jenkins -s /bin/bash jenkins; fi",
-
       # Install Jenkins plugin manager tool
       "wget --quiet https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.0/jenkins-plugin-manager-2.13.0.jar",
 
@@ -172,7 +180,11 @@ build {
       "sudo cp /home/ubuntu/groovy_scripts/wizard.groovy /var/lib/jenkins/init.groovy.d/",
       "sudo cp /home/ubuntu/groovy_scripts/login.groovy /var/lib/jenkins/init.groovy.d/",
 
-      # Update users and group permissions to `jenkins` for all installed plugins
+      "sudo sed -i 's/default/${var.jenkins_admin_user}/g' /var/lib/jenkins/init.groovy.d/login.groovy",
+      "sudo sed -i 's/default/${var.jenkins_admin_password}/g' /var/lib/jenkins/init.groovy.d/login.groovy",
+      "sudo systemctl restart jenkins",
+
+      # Update users and group permissions to `jenkins` for all installed plugins:
       "cd /var/lib/jenkins/plugins/ || exit",
       "sudo chown jenkins:jenkins ./*",
 
@@ -196,7 +208,6 @@ build {
       "echo '[Service]' | sudo tee /etc/systemd/system/jenkins.service.d/override.conf",
       "echo 'TimeoutStartSec=600' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf",
       "sudo systemctl daemon-reload",
-      "sudo systemctl enable jenkins",
       "sudo systemctl restart jenkins",
       "sudo systemctl status jenkins"
     ]
