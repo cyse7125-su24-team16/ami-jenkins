@@ -32,7 +32,7 @@ jobs:
           echo source_ami=\"${{ secrets.SOURCE_AMI }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo aws_region=\"${{ secrets.AWS_REGION }}\" >> ./packer/jenkins-ami.pkrvars.hcl
           echo instance_type=\"${{ secrets.INSTANCE_TYPE}}\" >> ./packer/jenkins-ami.pkrvars.hcl
- 
+
       - name: Packer Init
         run: packer init ./packer/jenkins-ami.pkr.hcl
  
