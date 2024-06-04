@@ -1,4 +1,4 @@
 jobs:
   - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
-  - file: /var/lib/jenkins/groovy_scripts/docker-build.groovy
+ # - file: /var/lib/jenkins/groovy_scripts/docker-build.groovy
 
