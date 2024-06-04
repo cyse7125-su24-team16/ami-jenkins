@@ -184,7 +184,7 @@ build {
       "sudo sed -i 's/default/${var.jenkins_admin_password}/g' /var/lib/jenkins/init.groovy.d/login.groovy",
       "sudo systemctl restart jenkins",
 
-      # Update users and group permissions to `jenkins` for all installed plugins
+      # Update users and group permissions to `jenkins` for all installed plugins:
       "cd /var/lib/jenkins/plugins/ || exit",
       "sudo chown jenkins:jenkins ./*",
 
