@@ -149,8 +149,12 @@ build {
   }
 
   provisioner "shell" {
-    script = "./Scripts/Confirguring_Jenkins.sh"
-  }
+  environment_vars = [
+    "JENKINS_ADMIN_USER=${var.jenkins_admin_user}",
+    "JENKINS_ADMIN_PASSWORD=${var.jenkins_admin_password}"
+  ]
+  script = "./Scripts/Confirguring_Jenkins.sh"
+}
 
   post-processor "manifest" {
     output = "manifest.json"
