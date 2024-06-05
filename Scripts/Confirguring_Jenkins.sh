@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Export Packer variables as environment variables
+# Print the values of environment variables
+echo "JENKINS_ADMIN_USER: ${JENKINS_ADMIN_USER}"
+echo "JENKINS_ADMIN_PASSWORD: ${JENKINS_ADMIN_PASSWORD}"
+
+
 # Install Jenkins plugin manager tool
 wget --quiet https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.0/jenkins-plugin-manager-2.13.0.jar
 
@@ -23,8 +29,9 @@ sudo cp /home/ubuntu/groovy_scripts/wizard.groovy /var/lib/jenkins/init.groovy.d
 sudo cp /home/ubuntu/groovy_scripts/login.groovy /var/lib/jenkins/init.groovy.d/
 
 # Updating Jenkins login details in login.groovy.
-sudo sed -i 's/default/${var.jenkins_admin_user}/g' /var/lib/jenkins/init.groovy.d/login.groovy
-sudo sed -i 's/default/${var.jenkins_admin_password}/g' /var/lib/jenkins/init.groovy.d/login.groovy
+# Use sed to replace placeholders in the login.groovy file
+sudo sed -i "s/default/${JENKINS_ADMIN_USER}/g" /var/lib/jenkins/init.groovy.d/login.groovy
+sudo sed -i "s/default/${JENKINS_ADMIN_PASSWORD}/g" /var/lib/jenkins/init.groovy.d/login.groovy
 sudo systemctl restart jenkins
 
 # Update users and group permissions to `jenkins` for all installed plugins
