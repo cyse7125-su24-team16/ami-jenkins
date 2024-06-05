@@ -141,17 +141,17 @@ build {
   }
 
   provisioner "shell" {
-    script="./Scripts/Jenkins_Installation.sh"
+    script = "./Scripts/Jenkins_Installation.sh"
   }
 
   provisioner "shell" {
-    script="./Scripts/Caddy_Setup.sh"
+    script = "./Scripts/Caddy_Setup.sh"
   }
 
   provisioner "shell" {
-    script="./Scripts/Confirguring_Jenkins.sh"
+    script = "./Scripts/Confirguring_Jenkins.sh"
   }
-  
+
   post-processor "manifest" {
     output = "manifest.json"
   }
