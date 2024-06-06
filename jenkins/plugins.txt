@@ -9,3 +9,10 @@ github-api:latest
 github-branch-source:latest
 gradle:latest
 groovy:latest
+job-dsl:latest
+workflow-multibranch:latest
+docker-plugin:latest
+pipeline-github-lib:latest
+pipeline-stage-view:latest
+ssh-slaves:latest
+workflow-aggregator:latest
