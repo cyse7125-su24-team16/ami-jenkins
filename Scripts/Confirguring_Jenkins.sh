@@ -36,10 +36,6 @@ sudo cp /home/ubuntu/groovy_scripts/login.groovy /var/lib/jenkins/init.groovy.d/
 # Use sed to replace placeholders in the login.groovy file
 sudo sed -i "s/default/${JENKINS_ADMIN_USER}/g" /var/lib/jenkins/init.groovy.d/login.groovy
 sudo sed -i "s/default/${JENKINS_ADMIN_PASSWORD}/g" /var/lib/jenkins/init.groovy.d/login.groovy
-sudo sed -i "s/git_username/${GITHUB_USERNAME}/g" /var/lib/jenkins/jcasc.yaml
-sudo sed -i "s/git_password/${GITHUB_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
-sudo sed -i "s/docker_username/${DOCKER_USERNAME}/g" /var/lib/jenkins/jcasc.yaml
-sudo sed -i "s/docker_password/${DOCKER_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
 sudo systemctl restart jenkins
  
 # Update users and group permissions to `jenkins` for all installed plugins
@@ -54,8 +50,14 @@ sudo mv configs.tgz /var/lib/jenkins/
 cd /var/lib/jenkins/ || exit
 sudo tar -xzvf configs.tgz
 sudo chown jenkins:jenkins ./jcasc.yaml ./groovy_scripts/*.groovy
- 
-# Configure JAVA_OPTS to disable setup wizard
+
+# Update file ownership for jcasc.yaml
+sudo sed -i "s/git_username/${GITHUB_USERNAME}/g" /var/lib/jenkins/jcasc.yaml
+sudo sed -i "s/ggit_password/${GITHUB_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
+sudo sed -i "s/docker_username/${DOCKER_USERNAME}/g" /var/lib/jenkins/jcasc.yaml
+sudo sed -i "s/docker_password/${DOCKER_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
+sudo systemctl restart jenkins
+
 # Configure JAVA_OPTS to disable setup wizard
 sudo mkdir -p /etc/systemd/system/jenkins.service.d/
 {
@@ -73,4 +75,3 @@ sudo systemctl status jenkins
  
 # # Check Jenkins service status
 # sudo systemctl status jenkins
- 
