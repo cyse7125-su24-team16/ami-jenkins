@@ -44,7 +44,7 @@ jobs:
         run: exit 1
  
       - name: Run packer validate
-        run: packer validate -var 'ami_users=${{ secrets.AMI_USERS }}'  -var 'jenkins_admin_user=${{ secrets.JENKINS_ADMIN_USER }}' -var 'jenkins_admin_password=${{ secrets.JENKINS_ADMIN_PASSWORD }}'  --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
+        run: packer validate -var 'ami_users=${{ secrets.AMI_USERS }}'  -var 'jenkins_admin_user=${{ secrets.JENKINS_ADMIN_USER }}' -var 'jenkins_admin_password=${{ secrets.JENKINS_ADMIN_PASSWORD }}'  -var 'github_username=${{ secrets.GIT_USERNAME }}' -var 'github_password=${{ secrets.GIT_PASSWORD }}' -var 'docker_username=${{ secrets.DOCKER_USERNAME }}' -var 'docker_password=${{ secrets.DOCKER_PASSWORD }}' --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
  
       - name: Fail if packer validate fails
         if: ${{ steps.setup.outputs.exit-code != 0 }}

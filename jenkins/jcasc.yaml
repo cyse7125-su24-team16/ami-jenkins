@@ -1,4 +1,23 @@
-jobs:
-  - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
- # - file: /var/lib/jenkins/groovy_scripts/docker-build.groovy
+
+  credentials:
+    system:
+      domainCredentials:
+        - credentials:
+            - usernamePassword:
+                scope: GLOBAL
+                id: github_token
+                username: "git_username"
+                password: "ggit_password"
+                description: "Github token for Jenkins"
+            
+            - usernamePassword:
+                scope: GLOBAL
+                id: docker_credentials
+                username: "docker_username"
+                password: "docker_password"
+                description: "docker token for Jenkins"
+
+  jobs:
+    - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
+    - file: /var/lib/jenkins/groovy_scripts/static-site.groovy
 

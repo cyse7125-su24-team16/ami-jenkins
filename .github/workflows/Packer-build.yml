@@ -1,7 +1,7 @@
 name: Packer Build Workflow
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -40,7 +40,7 @@ jobs:
         env:
           aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY_ID }}
-        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}'  -var 'jenkins_admin_user=${{ secrets.JENKINS_ADMIN_USER }}' -var 'jenkins_admin_password=${{ secrets.JENKINS_ADMIN_PASSWORD }}' --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
+        run: packer build -var 'ami_users=${{ secrets.AMI_USERS }}'  -var 'jenkins_admin_user=${{ secrets.JENKINS_ADMIN_USER }}' -var 'jenkins_admin_password=${{ secrets.JENKINS_ADMIN_PASSWORD }}' -var 'github_username=${{ secrets.GIT_USERNAME }}' -var 'github_password=${{ secrets.GIT_PASSWORD }}' -var 'docker_username=${{ secrets.DOCKER_USERNAME }}' -var 'docker_password=${{ secrets.DOCKER_PASSWORD }}' --var-file=./packer/jenkins-ami.pkrvars.hcl ./packer/jenkins-ami.pkr.hcl
 
       - name: GET AMI ID
         id: GET_AMI

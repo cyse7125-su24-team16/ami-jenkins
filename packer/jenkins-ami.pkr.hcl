@@ -84,6 +84,26 @@ variable "jenkins_admin_password" {
   description = "The Jenkins admin password"
 }
 
+variable "github_username" {
+  type        = string
+  description = "The Jenkins admin user"
+}
+
+variable "github_password" {
+  type        = string
+  description = "The Jenkins admin password"
+}
+
+variable "docker_username" {
+  type        = string
+  description = "The Jenkins admin user"
+}
+
+variable "docker_password" {
+  type        = string
+  description = "The Jenkins admin password"
+}
+
 locals {
   timestamp = regex_replace(formatdate("YYYY-MM-DD-hh-mm-ss", timestamp()), "[- TZ:]", "")
 }
@@ -151,7 +171,12 @@ build {
   provisioner "shell" {
     environment_vars = [
       "JENKINS_ADMIN_USER=${var.jenkins_admin_user}",
-      "JENKINS_ADMIN_PASSWORD=${var.jenkins_admin_password}"
+      "JENKINS_ADMIN_PASSWORD=${var.jenkins_admin_password}",
+      "GITHUB_USERNAME=${var.github_username}",
+      "GITHUB_PASSWORD=${var.github_password}",
+      "DOCKER_USERNAME=${var.docker_username}",
+      "DOCKER_PASSWORD=${var.docker_password}"
+
     ]
     script = "./Scripts/Confirguring_Jenkins.sh"
   }
