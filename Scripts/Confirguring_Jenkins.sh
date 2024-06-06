@@ -50,7 +50,7 @@ sudo chown jenkins:jenkins ./jcasc.yaml ./groovy_scripts/*.groovy
 # Configure JAVA_OPTS to disable setup wizard
 sudo mkdir -p /etc/systemd/system/jenkins.service.d/
 echo '[Service]' | sudo tee /etc/systemd/system/jenkins.service.d/override.conf
-echo 'Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jcasc.yml\"' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf
+echo 'Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jcasc.yml"' | sudo tee -a /etc/systemd/system/jenkins.service.d/override.conf
 
 # Increase Jenkins service timeout and check status and logs
 echo 'Configuring Jenkins service timeout and checking status...'
