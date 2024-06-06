@@ -181,6 +181,10 @@ build {
     script = "./Scripts/Confirguring_Jenkins.sh"
   }
 
+  provisioner "shell" {
+    script = "./Scripts/Docker_Installation.sh"
+  }
+
   post-processor "manifest" {
     output = "manifest.json"
   }
