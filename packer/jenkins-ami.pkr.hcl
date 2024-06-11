@@ -109,7 +109,7 @@ locals {
 }
 
 
-source "amazon-ebs" "ubuntu" {
+sources "amazon-ebs" "ubuntu" {
   region          = "${var.aws_region}"
   ami_name        = "${var.ami_name}--${local.timestamp}"
   ami_description = "Building Jenkins AMI built with Packer"
