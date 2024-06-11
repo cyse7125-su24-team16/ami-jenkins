@@ -17,7 +17,7 @@ wget --quiet https://github.com/jenkinsci/plugin-installation-manager-tool/relea
 sudo java -jar ./jenkins-plugin-manager-2.13.0.jar --war /usr/share/java/jenkins.war --plugin-download-directory /var/lib/jenkins/plugins --plugin-file /home/ubuntu/plugins.txt
  
 #Creating a tar file of all the associated configuration files.
-tar -czvf configs.tgz ./jcasc.yaml ./groovy_scripts/helloworld.groovy ./groovy_scripts/wizard.groovy ./groovy_scripts/login.groovy ./groovy_scripts/static-site.groovy
+tar -czvf configs.tgz ./jcasc.yaml ./groovy_scripts/helloworld.groovy ./groovy_scripts/wizard.groovy ./groovy_scripts/login.groovy ./groovy_scripts/static-site.groovy ./groovy_scripts/JenkinsAMI.groovy
  
 #Change the ownership of the tar file to jenkins.
 sudo chown ubuntu:ubuntu configs.tgz
@@ -56,6 +56,8 @@ sudo sed -i "s/git_username/${GITHUB_USERNAME}/g" /var/lib/jenkins/jcasc.yaml
 sudo sed -i "s/ggit_password/${GITHUB_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
 sudo sed -i "s/docker_username/${DOCKER_USERNAME}/g" /var/lib/jenkins/jcasc.yaml
 sudo sed -i "s/docker_password/${DOCKER_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
+sudo sed -i "s/jenkins_username/${JENKINS_ADMIN_USER}/g" /var/lib/jenkins/jcasc.yaml
+sudo sed -i "s/jenkins_password/${JENKINS_ADMIN_PASSWORD}/g" /var/lib/jenkins/jcasc.yaml
 sudo systemctl restart jenkins
 
 # Configure JAVA_OPTS to disable setup wizard
@@ -63,6 +65,7 @@ sudo mkdir -p /etc/systemd/system/jenkins.service.d/
 {
   echo "[Service]"
   echo "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jcasc.yaml\""
+  echo "TimeoutStartSec=600"
 } | sudo tee /etc/systemd/system/jenkins.service.d/override.conf
  
 # Increase Jenkins service timeout and check status and logs
