@@ -141,7 +141,7 @@ build {
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "file" {
-    source      = "./packer"
+    source      = "././packer"
     destination = "/home/ubuntu/packer"
   }
 
