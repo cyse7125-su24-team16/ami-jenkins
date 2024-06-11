@@ -7,6 +7,28 @@ pipeline {
         JENKINS_ADMIN_CREDENTIALS_ID = 'jenkins_credentials'
     }
 
+    stage('Check Commit Messages') {
+            steps {
+                script {
+                    // Fetch all commits in the PR
+                    def latestCommitMessage = sh(script: "git log -1 --pretty=format:%s origin/main", returnStdout: true).trim()
+                    echo "Latest commit message: ${latestCommitMessage}"
+                   
+                    def commits = latestCommitMessage.split('\n')
+                   
+                    // Regex for Conventional Commits
+                    def pattern = ~/^\s*(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?: .+\s*$/
+                   
+                    // Check each commit message
+                    for (commit in commits) {
+                        if (!pattern.matcher(commit).matches()) {
+                            error "Commit message does not follow Conventional Commits: ${commit}"
+                        }
+                    }
+                }
+            }
+        }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,6 +38,8 @@ pipeline {
                 }
             }
         }
+
+
         stage('Fetch and Checkout PR Branch') {
             steps {
                 script {
@@ -23,11 +47,14 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: GITHUB_CREDENTIALS_ID, usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
                         sh 'git config --global credential.helper store'
                         sh 'echo "https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials'
+
                         // Fetch all branches including PR branches
                         sh 'git fetch origin +refs/pull/*/head:refs/remotes/origin/pr/*'
+
                         // Dynamically fetch the current PR branch name using environment variables
                         def prBranch = env.CHANGE_BRANCH
                         echo "PR Branch: ${prBranch}"
+
                         // Checkout the PR branch
                         sh "git checkout -B ${prBranch} origin/pr/${env.CHANGE_ID}"
                     }
