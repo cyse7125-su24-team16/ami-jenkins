@@ -19,6 +19,11 @@ pipeline {
                 }
             }
         }
+         stage('Compare Changes') {
+            steps {
+                sh 'git diff origin/main...HEAD'
+            }
+        }
 
         stage('Run Packer Init') {
             steps {
