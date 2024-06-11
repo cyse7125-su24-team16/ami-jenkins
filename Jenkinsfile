@@ -8,15 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                script {
-                    // Checkout the main branch
-                    git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/cyse7125-su24-team16/ami-jenkins.git', branch: 'main'
-                }
-            }
-        }
-        stage('Fetch and Checkout PR Branch') {
+        stage('Checkout PR Branch') {
             steps {
                 script {
                     // Fetch the latest changes from the origin using credentials
@@ -34,6 +26,25 @@ pipeline {
                 }
             }
         }
+
+        stage('Check Commit Messages') {
+            steps {
+                script {
+                    // Fetch the latest commit message in the PR branch
+                    def latestCommitMessage = sh(script: "git log -1 --pretty=format:%s", returnStdout: true).trim()
+                    echo "Latest commit message: ${latestCommitMessage}"
+                   
+                    // Regex for Conventional Commits
+                    def pattern = ~/^\s*(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?: .+\s*$/
+                   
+                    // Check the latest commit message
+                    if (!pattern.matcher(latestCommitMessage).matches()) {
+                        error "Commit message does not follow Conventional Commits: ${latestCommitMessage}"
+                    }
+                }
+            }
+        }
+
         stage('Compare Changes') {
             steps {
                 script {
