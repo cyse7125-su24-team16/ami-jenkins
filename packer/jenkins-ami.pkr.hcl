@@ -185,6 +185,10 @@ build {
     script = "./Scripts/Docker_Installation.sh"
   }
 
+   provisioner "shell" {
+    script = "./Scripts/Packer_Installation.sh"
+  }
+
   post-processor "manifest" {
     output = "manifest.json"
   }
