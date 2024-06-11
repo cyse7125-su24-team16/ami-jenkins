@@ -8,9 +8,15 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/cyse7125-su24-team16/ami-jenkins.git', branch: 'main'
+       stage('Checking out the code') {
+            steps{
+                script {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: 'main']],
+                        userRemoteConfigs: [[credentialsId: 'github_token', url: 'https://github.com/cyse7125-su24-team16/ami-jenkins.git']]
+                    ])
+                }
             }
         }
 
