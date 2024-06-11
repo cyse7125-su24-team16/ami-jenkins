@@ -185,7 +185,7 @@ build {
     script = "./Scripts/Docker_Installation.sh"
   }
 
-   provisioner "shell" {
+  provisioner "shell" {
     script = "./Scripts/Packer_Installation.sh"
   }
 
