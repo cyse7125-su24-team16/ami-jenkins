@@ -10,17 +10,48 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/cyse7125-su24-team16/ami-jenkins.git', branch: 'main'
+                script {
+                    // Checkout the main branch
+                    git credentialsId: GITHUB_CREDENTIALS_ID, url: 'https://github.com/cyse7125-su24-team16/ami-jenkins.git', branch: 'main'
+                }
+            }
+        }
+        stage('Fetch and Checkout PR Branch') {
+            steps {
+                script {
+                    // Fetch the latest changes from the origin using credentials
+                    withCredentials([usernamePassword(credentialsId: GITHUB_CREDENTIALS_ID, usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+                        sh 'git config --global credential.helper store'
+                        sh 'echo "https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials'
+                        // Fetch all branches including PR branches
+                        sh 'git fetch origin +refs/pull/*/head:refs/remotes/origin/pr/*'
+                        // Dynamically fetch the current PR branch name using environment variables
+                        def prBranch = env.CHANGE_BRANCH
+                        echo "PR Branch: ${prBranch}"
+                        // Checkout the PR branch
+                        sh "git checkout -B ${prBranch} origin/pr/${env.CHANGE_ID}"
+                    }
+                }
             }
         }
         stage('Compare Changes') {
             steps {
-                sh 'git diff origin/main...HEAD'
+                script {
+                    // Compare the PR branch with the main branch
+                    def diff = sh(script: 'git diff origin/main...HEAD', returnStdout: true).trim()
+                    echo "Git Diff: ${diff}"
+                    if (diff == "") {
+                        echo "No differences found."
+                    } else {
+                        echo "Differences found:\n${diff}"
+                    }
+                }
             }
         }
 
         stage('Run Packer Init') {
             steps {
+                // Initialize Packer environment
                 sh 'packer init ./packer/jenkins-ami.pkr.hcl'
             }
         }
@@ -28,6 +59,7 @@ pipeline {
         stage('Run Packer Fmt') {
             steps {
                 script {
+                    // Check if Packer files are formatted correctly
                     def result = sh(script: 'packer fmt --check ./packer/jenkins-ami.pkr.hcl > packer_fmt_output.log 2>&1', returnStatus: true)
                     echo "packer fmt exit code: ${result}"
                     sh 'cat packer_fmt_output.log'
@@ -46,6 +78,7 @@ pipeline {
                     usernamePassword(credentialsId: 'jenkins_credentials', usernameVariable: 'JENKINS_ADMIN_USER', passwordVariable: 'JENKINS_ADMIN_PASSWORD')
                 ]) {
                     script {
+                        // Validate Packer configuration
                         def result = sh(script: '''
                             packer validate \
                             -var 'github_username=${GITHUB_TOKEN_USR}' \
