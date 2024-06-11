@@ -146,7 +146,7 @@ build {
   }
 
   provisioner "file" {
-    source      = "./jenkins/plugins.txt"
+    source      = "././jenkins/plugins.txt"
     destination = "/home/ubuntu/plugins.txt"
   }
 
