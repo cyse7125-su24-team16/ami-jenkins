@@ -67,14 +67,17 @@ sudo mkdir -p /etc/systemd/system/jenkins.service.d/
   echo "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dcasc.jenkins.config=/var/lib/jenkins/jcasc.yaml\""
   echo "TimeoutStartSec=600"
 } | sudo tee /etc/systemd/system/jenkins.service.d/override.conf
- 
-# Increase Jenkins service timeout and check status and logs
+
+   # Increase Jenkins service timeout and check status and logs
+echo 'Configuring Jenkins service timeout and checking status...'
 sudo systemctl daemon-reload
+sudo systemctl enable jenkins
 sudo systemctl restart jenkins
 sudo systemctl status jenkins
- 
+
 # # Set execute permissions for Groovy scripts
 # sudo chmod +x /var/lib/jenkins/groovy_scripts/*.groovy
  
 # # Check Jenkins service status
 # sudo systemctl status jenkins
+ 
