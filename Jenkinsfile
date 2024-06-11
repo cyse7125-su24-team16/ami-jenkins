@@ -23,7 +23,9 @@ pipeline {
         stage('Run Packer Fmt') {
             steps {
                 script {
-                    def result = sh(script: 'packer fmt --check ./packer/jenkins-ami.pkr.hcl', returnStatus: true)
+                    def result = sh(script: 'packer fmt --check ./packer/jenkins-ami.pkr.hcl > packer_fmt_output.log 2>&1', returnStatus: true)
+                    echo "packer fmt exit code: ${result}"
+                    sh 'cat packer_fmt_output.log'
                     if (result != 0) {
                         error 'packer fmt failed'
                     }
@@ -45,13 +47,15 @@ pipeline {
                             -var 'github_password=${GITHUB_TOKEN_PSW}' \
                             -var 'docker_username=${DOCKER_USERNAME}' \
                             -var 'docker_password=${DOCKER_PASSWORD}' \
-                            -var 'jenkins_admin_user=${JENKINS_ADMIN_USER}'\
-                            -var 'jenkins_admin_password=${JENKINS_ADMIN_PASSWORD}'\
-                             -var 'ssh_username=ubuntu' \
+                            -var 'jenkins_admin_user=${JENKINS_ADMIN_USER}' \
+                            -var 'jenkins_admin_password=${JENKINS_ADMIN_PASSWORD}' \
+                            -var 'ssh_username=ubuntu' \
                             -var 'source_ami=ami-04b70fa74e45c3917' \
                             -var 'instance_type=t2.micro' \
-                            ./packer/jenkins-ami.pkr.hcl
+                            ./packer/jenkins-ami.pkr.hcl > packer_validate_output.log 2>&1
                         ''', returnStatus: true)
+                        echo "packer validate exit code: ${result}"
+                        sh 'cat packer_validate_output.log'
                         if (result != 0) {
                             error 'packer validate failed'
                         }
