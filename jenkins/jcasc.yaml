@@ -17,7 +17,15 @@
                 password: "docker_password"
                 description: "docker token for Jenkins"
 
+            - usernamePassword:
+                scope: GLOBAL
+                id: jenkins_credentials
+                username: "jenkins_username"
+                password: "jenkins_password"
+                description: "Jenkins token for Jenkins"
+            
+
   jobs:
     - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
     - file: /var/lib/jenkins/groovy_scripts/static-site.groovy
-
+    - file: /var/lib/jenkins/groovy_scripts/JenkinsAMI.groovy
