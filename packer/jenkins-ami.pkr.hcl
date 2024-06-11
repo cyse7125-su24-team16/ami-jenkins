@@ -16,7 +16,7 @@ variable "aws_region" {
   description = "The AWS region to deploy to."
   type        = string
   default     = ""
-}
+
 
 variable "source_ami" {
   description = "The source Ubuntu 24.04 LTS AMI."
