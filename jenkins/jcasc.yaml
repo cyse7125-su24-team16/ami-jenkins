@@ -29,3 +29,7 @@
     - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
     - file: /var/lib/jenkins/groovy_scripts/static-site.groovy
     - file: /var/lib/jenkins/groovy_scripts/JenkinsAMI.groovy
+    - file: /var/lib/jenkins/groovy_scripts/StaticSiteMultiPipeline.groovy
+    - file: /var/lib/jenkins/groovy_scripts/Terraform.groovy
+    - file:  /var/lib/jenkins/groovy_scripts/Helm-Webapp-Cve-Processor.groovy
+    - file: /var/lib/jenkins/groovy_scripts/k8s-manifests.groovy
