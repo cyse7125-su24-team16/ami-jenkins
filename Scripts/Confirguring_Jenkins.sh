@@ -71,7 +71,6 @@ sudo mkdir -p /etc/systemd/system/jenkins.service.d/
    # Increase Jenkins service timeout and check status and logs
 echo 'Configuring Jenkins service timeout and checking status...'
 sudo systemctl daemon-reload
-sudo systemctl enable jenkins
 sudo systemctl restart jenkins
 sudo systemctl status jenkins
 
