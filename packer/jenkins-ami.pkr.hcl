@@ -189,6 +189,24 @@ build {
     script = "./Scripts/Packer_Installation.sh"
   }
 
+  provisioner "shell" {
+    script = "./Scripts/Helm_Installation.sh"
+  }
+
+  provisioner "shell" {
+    script = "./Scripts/Terraform-Installation.sh"
+  }
+  
+  provisioner "shell" {
+    script = "./Scripts/Node_Installation.sh"
+  }
+
+  provisioner"shell"{
+    script = "./Scripts/Yamllint_Installation.sh"
+  }
+
+
+
   post-processor "manifest" {
     output = "manifest.json"
   }
