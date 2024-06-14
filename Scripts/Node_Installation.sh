@@ -52,6 +52,10 @@ echo "Installing GitHub CLI..."
 sudo npm install -g npm-cli-login
 sudo apt install -y gh
 
+
+#Installing Zip:
+sudo apt install zip -y
+
 # Confirm all installations
 echo "Installation complete. Versions:"
 node --version
