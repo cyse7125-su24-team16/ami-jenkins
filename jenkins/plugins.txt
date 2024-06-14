@@ -23,7 +23,6 @@ job-dsl:latest
 workflow-multibranch:latest
 workflow-job:latest
 docker-plugin:latest
-docker-build-step:latest
 docker-workflow:latest
 command-launcher:latest
 docker-java-api:latest
