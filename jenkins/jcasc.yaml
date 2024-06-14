@@ -33,3 +33,4 @@
     - file: /var/lib/jenkins/groovy_scripts/Terraform.groovy
     - file:  /var/lib/jenkins/groovy_scripts/Helm-Webapp-Cve-Processor.groovy
     - file: /var/lib/jenkins/groovy_scripts/k8s-manifests.groovy
+    - file: /var/lib/jenkins/groovy_scripts/Webapp-Cve-Processor.groovy
