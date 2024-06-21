@@ -16,23 +16,23 @@ sudo systemctl status caddy
 # Create a directory to save Caddy certificates if it doesn't exist
 sudo mkdir -p /etc/caddy
 
-# Create and save the staging SSL certificates in the Caddyfile
-# sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF
-# {
-#     acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
-# }
-# jenkins.centralhub.me {
-#     reverse_proxy localhost:8080
-# }
-# EOF'
+Create and save the staging SSL certificates in the Caddyfile
+sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF
+{
+    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+jenkins.centralhub.me {
+    reverse_proxy localhost:8080
+}
+EOF'
 
 # If you want to use production SSL certificates, uncomment and use the following block
 # Create and save the production SSL certificates in the Caddyfile
-sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF
-jenkins.centralhub.me {
-    reverse_proxy 127.0.0.1:8080
-}
-EOF'
+# sudo bash -c 'cat > /etc/caddy/Caddyfile <<EOF
+# jenkins.centralhub.me {
+#     reverse_proxy 127.0.0.1:8080
+# }
+# EOF'
 
 # Restart Caddy to apply the new configuration
 sudo systemctl restart caddy
