@@ -1,37 +1,37 @@
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: github_token
+              username: "git_username"
+              password: "ggit_password"
+              description: "Github token for Jenkins"
 
-  credentials:
-    system:
-      domainCredentials:
-        - credentials:
-            - usernamePassword:
-                scope: GLOBAL
-                id: github_token
-                username: "git_username"
-                password: "ggit_password"
-                description: "Github token for Jenkins"
-            
-            - usernamePassword:
-                scope: GLOBAL
-                id: docker_credentials
-                username: "docker_username"
-                password: "docker_password"
-                description: "docker token for Jenkins"
+          - usernamePassword:
+              scope: GLOBAL
+              id: docker_credentials
+              username: "docker_username"
+              password: "docker_password"
+              description: "docker token for Jenkins"
 
-            - usernamePassword:
-                scope: GLOBAL
-                id: jenkins_credentials
-                username: "jenkins_username"
-                password: "jenkins_password"
-                description: "Jenkins token for Jenkins"
-            
+          - usernamePassword:
+              scope: GLOBAL
+              id: jenkins_credentials
+              username: "jenkins_username"
+              password: "jenkins_password"
+              description: "Jenkins token for Jenkins"
 
-  jobs:
-    - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
-    - file: /var/lib/jenkins/groovy_scripts/static-site.groovy
-    - file: /var/lib/jenkins/groovy_scripts/JenkinsAMI.groovy
-    - file: /var/lib/jenkins/groovy_scripts/StaticSiteMultiPipeline.groovy
-    - file: /var/lib/jenkins/groovy_scripts/Terraform.groovy
-    - file:  /var/lib/jenkins/groovy_scripts/Helm-Webapp-Cve-Processor.groovy
-    - file: /var/lib/jenkins/groovy_scripts/k8s-manifests.groovy
-    - file: /var/lib/jenkins/groovy_scripts/Webapp-Cve-Processor.groovy
-    - file: /var/lib/jenkins/groovy_scripts/AWS-Infra.groovy
+jobs:
+  - file: /var/lib/jenkins/groovy_scripts/helloworld.groovy
+  - file: /var/lib/jenkins/groovy_scripts/static-site.groovy
+  - file: /var/lib/jenkins/groovy_scripts/JenkinsAMI.groovy
+  - file: /var/lib/jenkins/groovy_scripts/StaticSiteMultiPipeline.groovy
+  - file: /var/lib/jenkins/groovy_scripts/Terraform.groovy
+  - file: /var/lib/jenkins/groovy_scripts/Helm-Webapp-Cve-Processor.groovy
+  - file: /var/lib/jenkins/groovy_scripts/k8s-manifests.groovy
+  - file: /var/lib/jenkins/groovy_scripts/Webapp-Cve-Processor.groovy
+  - file: /var/lib/jenkins/groovy_scripts/AWS-Infra.groovy
+  - file: /var/lib/jenkins/groovy_scripts/Consumer-Webapp.groovy
+  - file: /var/lib/jenkins/groovy_scripts/Helm-Consumer.groovy
