@@ -1,5 +1,5 @@
 multibranchPipelineJob('EKS-Autoscaler-Job') {
-    displayName('EKS-Autoscaler-Job')
+    displayName('EKS-Autoscalerr-Job')
     description('Validate Push and Pull Conventional Messages.')
     branchSources {
         github {
