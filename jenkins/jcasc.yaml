@@ -35,3 +35,4 @@ jobs:
   - file: /var/lib/jenkins/groovy_scripts/AWS-Infra.groovy
   - file: /var/lib/jenkins/groovy_scripts/Consumer-Webapp.groovy
   - file: /var/lib/jenkins/groovy_scripts/Helm-Consumer.groovy
+  - file: /var/lib/jenkins/groovy_scripts/eks-autoscaler.groovy
