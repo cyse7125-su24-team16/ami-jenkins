@@ -37,3 +37,4 @@ jobs:
   - file: /var/lib/jenkins/groovy_scripts/Consumer-Webapp.groovy
   - file: /var/lib/jenkins/groovy_scripts/Helm-Consumer.groovy
   - file: /var/lib/jenkins/groovy_scripts/eks-autoscaler.groovy
+  - file: /var/lib/jenkins/groovy_scripts/Cve-Operator.groovy
